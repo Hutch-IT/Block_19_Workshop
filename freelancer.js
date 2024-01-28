@@ -70,38 +70,54 @@ const occupations = ["Computer Support Specialist",
     "Mason",
     "Insurance Agent"
 ];
-const addFreelancerIntervalId = setInterval(addFreelancer, 5000);
+const median = arr => {
+    arr.sort((a, b) => a.price - b.price);
+    const middleIndex = Math.floor(arr.length / 2);
+    console.log(middleIndex)
+    console.log(arr[middleIndex]['price'])
+    return arr.length % 2 !== 0 ? arr[middleIndex]['price'] : (arr[middleIndex - 1]['price'] + arr[middleIndex]['price']) / 2;
+}
+const addFreelancerIntervalId = setInterval(addFreelancer, 3000);
 render();
 
 function render() {
     const table = document.querySelector("#freeLancerTbl");
     const avg = document.querySelector("#average");
-    let average = freelancers.reduce((accumulator, currentValue) => {
-        accumulator += currentValue.price;
-        return Math.round(accumulator / freelancers.length)
-    }, 0);
-    avg.innerHTML = 'The average starting price is $' + average + '.';
+
+
+    // let average = freelancers.reduce((accumulator, currentValue) => {
+    //     accumulator += currentValue.price;
+    //     return Math.round(accumulator / freelancers.length)
+    // }, 0);
+
+    avg.innerHTML = 'The average starting price is $' + median(freelancers) + '.';
 
     const tableData = freelancers.map((obj) => {
         const tableRows = document.createElement('tr');
         const element2 = document.createElement('td');
-        element2.textContent = obj.name;
+        element2.innerHTML = obj.name;
         const element3 = document.createElement('td');
-        element3.textContent = obj.occupation.toUpperCase()
+        element3.innerHTML = obj.occupation.toUpperCase()
         const element4 = document.createElement('td');
-        element4.textContent = '$ ' + obj.price
+        element4.innerHTML = '$ ' + obj.price
         tableRows.append(element2, element3, element4);
         return tableRows;
     });
     table.append(...tableData);
+    console.log(table.children);
 }
 
 function addFreelancer() {
     const randomName = names[Math.floor(Math.random() * names.length)];
     const randomOccupation = occupations[Math.floor(Math.random() * occupations.length)];
     const randomPrice = Math.floor(Math.random() * 100) + 1;
-
+    console.log(freelancers);
     freelancers.push({name: randomName, price: randomPrice, occupation: randomOccupation});
-    //render();
+    // console.log(freelancers.length)
+
+    render();
+    // if (freelancers.length >= 32) {
+    //     clearInterval(addFreelancerIntervalId);
+    // }
 }
 
